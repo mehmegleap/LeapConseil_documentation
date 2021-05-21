@@ -1,0 +1,732 @@
+config_dir: ./experiment
+cross_validation:
+- !!python/tuple
+  - !!python/tuple
+    - stratified_kfold
+    - !!python/object:sklearn.model_selection._split.StratifiedKFold
+      n_splits: 5
+      random_state: null
+      shuffle: false
+  - default
+drop_col:
+- COD_FERM_DOSS_PAL
+enable_ensemble_methods: false
+experiment: IND_MANDAT_DGAJ_model_selection
+feature_selection:
+- !!python/tuple
+  - !!python/tuple
+    - null
+    - null
+  - null
+filepath: ./Data_juridique_complexite.xlsx
+metrics:
+- !!python/tuple
+  - !!python/tuple
+    - Accuracy
+    - !!python/object:sklearn.metrics._scorer._PredictScorer
+      _kwargs: {}
+      _score_func: !!python/name:sklearn.metrics._classification.accuracy_score ''
+      _sign: 1
+  - default
+- !!python/tuple
+  - !!python/tuple
+    - balancedAcc
+    - !!python/object:sklearn.metrics._scorer._PredictScorer
+      _kwargs: {}
+      _score_func: !!python/name:sklearn.metrics._classification.balanced_accuracy_score ''
+      _sign: 1
+  - default
+- !!python/tuple
+  - !!python/tuple
+    - F1
+    - !!python/object:sklearn.metrics._scorer._PredictScorer
+      _kwargs: {}
+      _score_func: !!python/object/apply:functools.partial
+        args:
+        - &id001 !!python/name:sklearn.metrics._classification.f1_score ''
+        state: !!python/tuple
+        - *id001
+        - !!python/tuple []
+        - average: binary
+        - __annotations__: {}
+          __doc__: "Compute the F1 score, also known as balanced F-score or F-measure.\n\
+            \n    The F1 score can be interpreted as a weighted average of the precision\
+            \ and\n    recall, where an F1 score reaches its best value at 1 and worst\
+            \ score at 0.\n    The relative contribution of precision and recall to\
+            \ the F1 score are\n    equal. The formula for the F1 score is::\n\n \
+            \       F1 = 2 * (precision * recall) / (precision + recall)\n\n    In\
+            \ the multi-class and multi-label case, this is the average of\n    the\
+            \ F1 score of each class with weighting depending on the ``average``\n\
+            \    parameter.\n\n    Read more in the :ref:`User Guide <precision_recall_f_measure_metrics>`.\n\
+            \n    Parameters\n    ----------\n    y_true : 1d array-like, or label\
+            \ indicator array / sparse matrix\n        Ground truth (correct) target\
+            \ values.\n\n    y_pred : 1d array-like, or label indicator array / sparse\
+            \ matrix\n        Estimated targets as returned by a classifier.\n\n \
+            \   labels : array-like, default=None\n        The set of labels to include\
+            \ when ``average != 'binary'``, and their\n        order if ``average\
+            \ is None``. Labels present in the data can be\n        excluded, for\
+            \ example to calculate a multiclass average ignoring a\n        majority\
+            \ negative class, while labels not present in the data will\n        result\
+            \ in 0 components in a macro average. For multilabel targets,\n      \
+            \  labels are column indices. By default, all labels in ``y_true`` and\n\
+            \        ``y_pred`` are used in sorted order.\n\n        .. versionchanged::\
+            \ 0.17\n           Parameter `labels` improved for multiclass problem.\n\
+            \n    pos_label : str or int, default=1\n        The class to report if\
+            \ ``average='binary'`` and the data is binary.\n        If the data are\
+            \ multiclass or multilabel, this will be ignored;\n        setting ``labels=[pos_label]``\
+            \ and ``average != 'binary'`` will report\n        scores for that label\
+            \ only.\n\n    average : {'micro', 'macro', 'samples','weighted', 'binary'}\
+            \ or None,             default='binary'\n        This parameter is required\
+            \ for multiclass/multilabel targets.\n        If ``None``, the scores\
+            \ for each class are returned. Otherwise, this\n        determines the\
+            \ type of averaging performed on the data:\n\n        ``'binary'``:\n\
+            \            Only report results for the class specified by ``pos_label``.\n\
+            \            This is applicable only if targets (``y_{true,pred}``) are\
+            \ binary.\n        ``'micro'``:\n            Calculate metrics globally\
+            \ by counting the total true positives,\n            false negatives and\
+            \ false positives.\n        ``'macro'``:\n            Calculate metrics\
+            \ for each label, and find their unweighted\n            mean.  This does\
+            \ not take label imbalance into account.\n        ``'weighted'``:\n  \
+            \          Calculate metrics for each label, and find their average weighted\n\
+            \            by support (the number of true instances for each label).\
+            \ This\n            alters 'macro' to account for label imbalance; it\
+            \ can result in an\n            F-score that is not between precision\
+            \ and recall.\n        ``'samples'``:\n            Calculate metrics for\
+            \ each instance, and find their average (only\n            meaningful\
+            \ for multilabel classification where this differs from\n            :func:`accuracy_score`).\n\
+            \n    sample_weight : array-like of shape (n_samples,), default=None\n\
+            \        Sample weights.\n\n    zero_division : \"warn\", 0 or 1, default=\"\
+            warn\"\n        Sets the value to return when there is a zero division,\
+            \ i.e. when all\n        predictions and labels are negative. If set to\
+            \ \"warn\", this acts as 0,\n        but warnings are also raised.\n\n\
+            \    Returns\n    -------\n    f1_score : float or array of float, shape\
+            \ = [n_unique_labels]\n        F1 score of the positive class in binary\
+            \ classification or weighted\n        average of the F1 scores of each\
+            \ class for the multiclass task.\n\n    See Also\n    --------\n    fbeta_score,\
+            \ precision_recall_fscore_support, jaccard_score,\n    multilabel_confusion_matrix\n\
+            \n    References\n    ----------\n    .. [1] `Wikipedia entry for the\
+            \ F1-score\n           <https://en.wikipedia.org/wiki/F1_score>`_.\n\n\
+            \    Examples\n    --------\n    >>> from sklearn.metrics import f1_score\n\
+            \    >>> y_true = [0, 1, 2, 0, 1, 2]\n    >>> y_pred = [0, 2, 1, 0, 0,\
+            \ 1]\n    >>> f1_score(y_true, y_pred, average='macro')\n    0.26...\n\
+            \    >>> f1_score(y_true, y_pred, average='micro')\n    0.33...\n    >>>\
+            \ f1_score(y_true, y_pred, average='weighted')\n    0.26...\n    >>> f1_score(y_true,\
+            \ y_pred, average=None)\n    array([0.8, 0. , 0. ])\n    >>> y_true =\
+            \ [0, 0, 0, 0, 0, 0]\n    >>> y_pred = [0, 0, 0, 0, 0, 0]\n    >>> f1_score(y_true,\
+            \ y_pred, zero_division=1)\n    1.0...\n\n    Notes\n    -----\n    When\
+            \ ``true positive + false positive == 0``, precision is undefined.\n \
+            \   When ``true positive + false negative == 0``, recall is undefined.\n\
+            \    In such cases, by default the metric will be set to 0, as will f-score,\n\
+            \    and ``UndefinedMetricWarning`` will be raised. This behavior can\
+            \ be\n    modified with ``zero_division``.\n    "
+          __module__: sklearn.metrics._classification
+          __name__: f1_score
+          __qualname__: f1_score
+          __wrapped__: *id001
+      _sign: 1
+  - default
+models:
+- !!python/tuple
+  - !!python/tuple
+    - ada_boost
+    - !!python/object:sklearn.ensemble._weight_boosting.AdaBoostClassifier
+      _sklearn_version: 0.24.1
+      algorithm: SAMME.R
+      base_estimator: null
+      estimator_params: !!python/tuple []
+      learning_rate: 1.0
+      n_estimators: 50
+      random_state: null
+  - default
+- !!python/tuple
+  - !!python/tuple
+    - bagging
+    - !!python/object:sklearn.ensemble._bagging.BaggingClassifier
+      _sklearn_version: 0.24.1
+      base_estimator: null
+      bootstrap: true
+      bootstrap_features: false
+      estimator_params: !!python/tuple []
+      max_features: 1.0
+      max_samples: 1.0
+      n_estimators: 10
+      n_jobs: null
+      oob_score: false
+      random_state: null
+      verbose: 0
+      warm_start: false
+  - default
+- !!python/tuple
+  - !!python/tuple
+    - extratrees
+    - !!python/object:sklearn.ensemble._forest.ExtraTreesClassifier
+      _sklearn_version: 0.24.1
+      base_estimator: !!python/object:sklearn.tree._classes.ExtraTreeClassifier
+        _sklearn_version: 0.24.1
+        ccp_alpha: 0.0
+        class_weight: null
+        criterion: gini
+        max_depth: null
+        max_features: auto
+        max_leaf_nodes: null
+        min_impurity_decrease: 0.0
+        min_impurity_split: null
+        min_samples_leaf: 1
+        min_samples_split: 2
+        min_weight_fraction_leaf: 0.0
+        random_state: null
+        splitter: random
+      bootstrap: false
+      ccp_alpha: 0.0
+      class_weight: null
+      criterion: gini
+      estimator_params: !!python/tuple
+      - criterion
+      - max_depth
+      - min_samples_split
+      - min_samples_leaf
+      - min_weight_fraction_leaf
+      - max_features
+      - max_leaf_nodes
+      - min_impurity_decrease
+      - min_impurity_split
+      - random_state
+      - ccp_alpha
+      max_depth: null
+      max_features: auto
+      max_leaf_nodes: null
+      max_samples: null
+      min_impurity_decrease: 0.0
+      min_impurity_split: null
+      min_samples_leaf: 1
+      min_samples_split: 2
+      min_weight_fraction_leaf: 0.0
+      n_estimators: 100
+      n_jobs: null
+      oob_score: false
+      random_state: null
+      verbose: 0
+      warm_start: false
+  - default
+- !!python/tuple
+  - !!python/tuple
+    - random_forest
+    - !!python/object:sklearn.ensemble._forest.RandomForestClassifier
+      _sklearn_version: 0.24.1
+      base_estimator: !!python/object:sklearn.tree._classes.DecisionTreeClassifier
+        _sklearn_version: 0.24.1
+        ccp_alpha: 0.0
+        class_weight: null
+        criterion: gini
+        max_depth: null
+        max_features: null
+        max_leaf_nodes: null
+        min_impurity_decrease: 0.0
+        min_impurity_split: null
+        min_samples_leaf: 1
+        min_samples_split: 2
+        min_weight_fraction_leaf: 0.0
+        random_state: null
+        splitter: best
+      bootstrap: true
+      ccp_alpha: 0.0
+      class_weight: null
+      criterion: gini
+      estimator_params: &id002 !!python/tuple
+      - criterion
+      - max_depth
+      - min_samples_split
+      - min_samples_leaf
+      - min_weight_fraction_leaf
+      - max_features
+      - max_leaf_nodes
+      - min_impurity_decrease
+      - min_impurity_split
+      - random_state
+      - ccp_alpha
+      max_depth: null
+      max_features: auto
+      max_leaf_nodes: null
+      max_samples: null
+      min_impurity_decrease: 0.0
+      min_impurity_split: null
+      min_samples_leaf: 1
+      min_samples_split: 2
+      min_weight_fraction_leaf: 0.0
+      n_estimators: 100
+      n_jobs: null
+      oob_score: false
+      random_state: null
+      verbose: 0
+      warm_start: false
+  - default
+- !!python/tuple
+  - !!python/tuple
+    - gradient_boosting
+    - !!python/object:sklearn.ensemble._gb.GradientBoostingClassifier
+      _sklearn_version: 0.24.1
+      alpha: 0.9
+      ccp_alpha: 0.0
+      criterion: friedman_mse
+      init: null
+      learning_rate: 0.1
+      loss: deviance
+      max_depth: 3
+      max_features: null
+      max_leaf_nodes: null
+      min_impurity_decrease: 0.0
+      min_impurity_split: null
+      min_samples_leaf: 1
+      min_samples_split: 2
+      min_weight_fraction_leaf: 0.0
+      n_estimators: 100
+      n_iter_no_change: null
+      random_state: null
+      subsample: 1.0
+      tol: 0.0001
+      validation_fraction: 0.1
+      verbose: 0
+      warm_start: false
+  - default
+- !!python/tuple
+  - !!python/tuple
+    - hist_gradient_boost
+    - !!python/object:sklearn.ensemble._hist_gradient_boosting.gradient_boosting.HistGradientBoostingClassifier
+      _sklearn_version: 0.24.1
+      categorical_features: null
+      early_stopping: auto
+      l2_regularization: 0.0
+      learning_rate: 0.1
+      loss: auto
+      max_bins: 255
+      max_depth: null
+      max_iter: 100
+      max_leaf_nodes: 31
+      min_samples_leaf: 20
+      monotonic_cst: null
+      n_iter_no_change: 10
+      random_state: null
+      scoring: loss
+      tol: 1.0e-07
+      validation_fraction: 0.1
+      verbose: 0
+      warm_start: false
+  - default
+- !!python/tuple
+  - !!python/tuple
+    - linear_passive_aggressive
+    - !!python/object:sklearn.linear_model._passive_aggressive.PassiveAggressiveClassifier
+      C: 1.0
+      _sklearn_version: 0.24.1
+      alpha: 0.0001
+      average: false
+      class_weight: null
+      early_stopping: false
+      epsilon: 0.1
+      eta0: 1.0
+      fit_intercept: true
+      l1_ratio: 0.15
+      learning_rate: optimal
+      loss: hinge
+      max_iter: 1000
+      n_iter_no_change: 5
+      n_jobs: null
+      penalty: null
+      power_t: 0.5
+      random_state: null
+      shuffle: true
+      tol: 0.001
+      validation_fraction: 0.1
+      verbose: 0
+      warm_start: false
+  - default
+- !!python/tuple
+  - !!python/tuple
+    - logistic_regression
+    - !!python/object:sklearn.linear_model._logistic.LogisticRegression
+      C: 1.0
+      _sklearn_version: 0.24.1
+      class_weight: null
+      dual: false
+      fit_intercept: true
+      intercept_scaling: 1
+      l1_ratio: null
+      max_iter: 100
+      multi_class: auto
+      n_jobs: null
+      penalty: l2
+      random_state: null
+      solver: lbfgs
+      tol: 0.0001
+      verbose: 0
+      warm_start: false
+  - default
+- !!python/tuple
+  - !!python/tuple
+    - ridge
+    - !!python/object:sklearn.linear_model._ridge.RidgeClassifier
+      _sklearn_version: 0.24.1
+      alpha: 1.0
+      class_weight: null
+      copy_X: true
+      fit_intercept: true
+      max_iter: null
+      normalize: false
+      random_state: null
+      solver: auto
+      tol: 0.001
+  - default
+- !!python/tuple
+  - !!python/tuple
+    - sgd
+    - !!python/object:sklearn.linear_model._stochastic_gradient.SGDClassifier
+      C: 1.0
+      _sklearn_version: 0.24.1
+      alpha: 0.0001
+      average: false
+      class_weight: null
+      early_stopping: false
+      epsilon: 0.1
+      eta0: 0.0
+      fit_intercept: true
+      l1_ratio: 0.15
+      learning_rate: optimal
+      loss: hinge
+      max_iter: 1000
+      n_iter_no_change: 5
+      n_jobs: null
+      penalty: l2
+      power_t: 0.5
+      random_state: null
+      shuffle: true
+      tol: 0.001
+      validation_fraction: 0.1
+      verbose: 0
+      warm_start: false
+  - default
+- !!python/tuple
+  - !!python/tuple
+    - perceptron
+    - !!python/object:sklearn.linear_model._perceptron.Perceptron
+      C: 1.0
+      _sklearn_version: 0.24.1
+      alpha: 0.0001
+      average: false
+      class_weight: null
+      early_stopping: false
+      epsilon: 0.1
+      eta0: 1.0
+      fit_intercept: true
+      l1_ratio: 0.15
+      learning_rate: constant
+      loss: perceptron
+      max_iter: 1000
+      n_iter_no_change: 5
+      n_jobs: null
+      penalty: null
+      power_t: 0.5
+      random_state: 0
+      shuffle: true
+      tol: 0.001
+      validation_fraction: 0.1
+      verbose: 0
+      warm_start: false
+  - default
+- !!python/tuple
+  - !!python/tuple
+    - balanced_bagging
+    - !!python/object:imblearn.ensemble._bagging.BalancedBaggingClassifier
+      base_estimator: null
+      bootstrap: true
+      bootstrap_features: false
+      estimator_params: !!python/tuple []
+      max_features: 1.0
+      max_samples: 1.0
+      n_estimators: 10
+      n_jobs: null
+      oob_score: false
+      random_state: null
+      replacement: false
+      sampler: null
+      sampling_strategy: auto
+      verbose: 0
+      warm_start: false
+  - default
+- !!python/tuple
+  - !!python/tuple
+    - balanced_random_forest
+    - !!python/object:imblearn.ensemble._forest.BalancedRandomForestClassifier
+      base_estimator: !!python/object:sklearn.tree._classes.DecisionTreeClassifier
+        _sklearn_version: 0.24.1
+        ccp_alpha: 0.0
+        class_weight: null
+        criterion: gini
+        max_depth: null
+        max_features: null
+        max_leaf_nodes: null
+        min_impurity_decrease: 0.0
+        min_impurity_split: null
+        min_samples_leaf: 1
+        min_samples_split: 2
+        min_weight_fraction_leaf: 0.0
+        random_state: null
+        splitter: best
+      bootstrap: true
+      ccp_alpha: 0.0
+      class_weight: null
+      criterion: gini
+      estimator_params: *id002
+      max_depth: null
+      max_features: auto
+      max_leaf_nodes: null
+      max_samples: null
+      min_impurity_decrease: 0.0
+      min_impurity_split: null
+      min_samples_leaf: 1
+      min_samples_split: 2
+      min_weight_fraction_leaf: 0.0
+      n_estimators: 100
+      n_jobs: null
+      oob_score: false
+      random_state: null
+      replacement: false
+      sampling_strategy: auto
+      verbose: 0
+      warm_start: false
+  - default
+- !!python/tuple
+  - !!python/tuple
+    - rusboost
+    - !!python/object:imblearn.ensemble._weight_boosting.RUSBoostClassifier
+      algorithm: SAMME.R
+      base_estimator: null
+      estimator_params: !!python/tuple []
+      learning_rate: 1.0
+      n_estimators: 50
+      random_state: null
+      replacement: false
+      sampling_strategy: auto
+  - default
+- !!python/tuple
+  - !!python/tuple
+    - easy_ens
+    - !!python/object:imblearn.ensemble._easy_ensemble.EasyEnsembleClassifier
+      base_estimator: null
+      bootstrap: false
+      bootstrap_features: false
+      estimator_params: !!python/tuple []
+      max_features: 1.0
+      max_samples: 1.0
+      n_estimators: 10
+      n_jobs: null
+      oob_score: false
+      random_state: null
+      replacement: false
+      sampling_strategy: auto
+      verbose: 0
+      warm_start: false
+  - default
+- !!python/tuple
+  - !!python/tuple
+    - decision_tree
+    - !!python/object:sklearn.tree._classes.DecisionTreeClassifier
+      _sklearn_version: 0.24.1
+      ccp_alpha: 0.0
+      class_weight: null
+      criterion: gini
+      max_depth: null
+      max_features: null
+      max_leaf_nodes: null
+      min_impurity_decrease: 0.0
+      min_impurity_split: null
+      min_samples_leaf: 1
+      min_samples_split: 2
+      min_weight_fraction_leaf: 0.0
+      random_state: null
+      splitter: best
+  - default
+- !!python/tuple
+  - !!python/tuple
+    - extratree
+    - !!python/object:sklearn.tree._classes.ExtraTreeClassifier
+      _sklearn_version: 0.24.1
+      ccp_alpha: 0.0
+      class_weight: null
+      criterion: gini
+      max_depth: null
+      max_features: auto
+      max_leaf_nodes: null
+      min_impurity_decrease: 0.0
+      min_impurity_split: null
+      min_samples_leaf: 1
+      min_samples_split: 2
+      min_weight_fraction_leaf: 0.0
+      random_state: null
+      splitter: random
+  - default
+- !!python/tuple
+  - !!python/tuple
+    - linear_svc
+    - !!python/object:sklearn.svm._classes.LinearSVC
+      C: 1.0
+      _sklearn_version: 0.24.1
+      class_weight: null
+      dual: true
+      fit_intercept: true
+      intercept_scaling: 1
+      loss: squared_hinge
+      max_iter: 1000
+      multi_class: ovr
+      penalty: l2
+      random_state: null
+      tol: 0.0001
+      verbose: 0
+  - default
+- !!python/tuple
+  - !!python/tuple
+    - nu_svc
+    - !!python/object:sklearn.svm._classes.NuSVC
+      C: 0.0
+      _sklearn_version: 0.24.1
+      break_ties: false
+      cache_size: 200
+      class_weight: null
+      coef0: 0.0
+      decision_function_shape: ovr
+      degree: 3
+      epsilon: 0.0
+      gamma: scale
+      kernel: rbf
+      max_iter: -1
+      nu: 0.5
+      probability: false
+      random_state: null
+      shrinking: true
+      tol: 0.001
+      verbose: false
+  - default
+- !!python/tuple
+  - !!python/tuple
+    - svc
+    - !!python/object:sklearn.svm._classes.SVC
+      C: 1.0
+      _sklearn_version: 0.24.1
+      break_ties: false
+      cache_size: 200
+      class_weight: null
+      coef0: 0.0
+      decision_function_shape: ovr
+      degree: 3
+      epsilon: 0.0
+      gamma: scale
+      kernel: rbf
+      max_iter: -1
+      nu: 0.0
+      probability: false
+      random_state: null
+      shrinking: true
+      tol: 0.001
+      verbose: false
+  - default
+- !!python/tuple
+  - !!python/tuple
+    - k_neighbors
+    - !!python/object:sklearn.neighbors._classification.KNeighborsClassifier
+      _sklearn_version: 0.24.1
+      algorithm: auto
+      leaf_size: 30
+      metric: minkowski
+      metric_params: null
+      n_jobs: null
+      n_neighbors: 5
+      p: 2
+      radius: null
+      weights: uniform
+  - default
+- !!python/tuple
+  - !!python/tuple
+    - radius_neighbors
+    - !!python/object:sklearn.neighbors._classification.RadiusNeighborsClassifier
+      _sklearn_version: 0.24.1
+      algorithm: auto
+      leaf_size: 30
+      metric: minkowski
+      metric_params: null
+      n_jobs: null
+      n_neighbors: null
+      outlier_label: null
+      p: 2
+      radius: 1.0
+      weights: uniform
+  - default
+- !!python/tuple
+  - !!python/tuple
+    - nearest_centroids
+    - !!python/object:sklearn.neighbors._nearest_centroid.NearestCentroid
+      _sklearn_version: 0.24.1
+      metric: euclidean
+      shrink_threshold: null
+  - default
+- !!python/tuple
+  - !!python/tuple
+    - gaussian_process
+    - !!python/object:sklearn.gaussian_process._gpc.GaussianProcessClassifier
+      _sklearn_version: 0.24.1
+      copy_X_train: true
+      kernel: null
+      max_iter_predict: 100
+      multi_class: one_vs_rest
+      n_jobs: null
+      n_restarts_optimizer: 0
+      optimizer: fmin_l_bfgs_b
+      random_state: null
+      warm_start: false
+  - default
+- !!python/tuple
+  - !!python/tuple
+    - mlp
+    - !!python/object:sklearn.neural_network._multilayer_perceptron.MLPClassifier
+      _sklearn_version: 0.24.1
+      activation: relu
+      alpha: 0.0001
+      batch_size: auto
+      beta_1: 0.9
+      beta_2: 0.999
+      early_stopping: false
+      epsilon: 1.0e-08
+      hidden_layer_sizes: !!python/tuple
+      - 100
+      learning_rate: constant
+      learning_rate_init: 0.001
+      loss: log_loss
+      max_fun: 15000
+      max_iter: 200
+      momentum: 0.9
+      n_iter_no_change: 10
+      nesterovs_momentum: true
+      power_t: 0.5
+      random_state: null
+      shuffle: true
+      solver: adam
+      tol: 0.0001
+      validation_fraction: 0.1
+      verbose: false
+      warm_start: false
+  - default
+samplers:
+- !!python/tuple
+  - !!python/tuple
+    - null
+    - null
+  - null
+scale:
+- !!python/tuple
+  - !!python/tuple
+    - null
+    - null
+  - null
+seed: 42
+shuffle: true
+target_col: IND_MANDAT_DGAJ
+task: classif
+use_class_weight: false

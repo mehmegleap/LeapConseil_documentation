@@ -1,0 +1,89 @@
+cv:
+- kfold:
+    n_splits: 5
+    random_state: 42
+    shuffle: true
+dataset:
+  drop_cols:
+  - IND_MANDAT_DGAJ
+  - COD_FERM_DOSS_PAL
+  fp: ./Data_juridique_complexite.xlsx
+  target_col: COMPLEXITE
+experiment: data_preprocess
+metric:
+- MAE
+- MSE
+- R2
+model:
+- gradient_boosting:
+    alpha: 0.9
+    ccp_alpha: 0.0
+    criterion: friedman_mse
+    init: null
+    learning_rate: 0.1
+    loss: ls
+    max_depth: 3
+    max_features: null
+    max_leaf_nodes: null
+    min_impurity_decrease: 0.0
+    min_impurity_split: null
+    min_samples_leaf: 1
+    min_samples_split: 2
+    min_weight_fraction_leaf: 0.0
+    n_estimators: 100
+    n_iter_no_change: null
+    random_state: 42
+    subsample: 1.0
+    tol: 0.0001
+    validation_fraction: 0.1
+    verbose: 0
+    warm_start: false
+- random_forest:
+    bootstrap: true
+    ccp_alpha: 0.0
+    criterion: mse
+    max_depth: null
+    max_features: auto
+    max_leaf_nodes: null
+    max_samples: null
+    min_impurity_decrease: 0.0
+    min_impurity_split: null
+    min_samples_leaf: 1
+    min_samples_split: 2
+    min_weight_fraction_leaf: 0.0
+    n_estimators: 100
+    n_jobs: null
+    oob_score: false
+    random_state: 42
+    verbose: 0
+    warm_start: false
+- hist_gradient_boost:
+    categorical_features: null
+    early_stopping: auto
+    l2_regularization: 0.0
+    learning_rate: 0.1
+    loss: least_squares
+    max_bins: 255
+    max_depth: null
+    max_iter: 100
+    max_leaf_nodes: 31
+    min_samples_leaf: 20
+    monotonic_cst: null
+    n_iter_no_change: 10
+    random_state: 42
+    scoring: loss
+    tol: 1.0e-07
+    validation_fraction: 0.1
+    verbose: 0
+    warm_start: false
+scalers:
+- max_abs
+- min_max
+- robust
+- normalizer
+- poly
+- power
+- quantile
+- standard
+- low_variance
+task: reg

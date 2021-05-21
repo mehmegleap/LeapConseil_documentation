@@ -1,0 +1,38 @@
+cv:
+- kfold:
+    n_splits: 5
+    random_state: 42
+    shuffle: true
+dataset:
+  drop_cols:
+  - COD_FERM_DOSS_PAL
+  fp: ./Data_juridique_complexite.xlsx
+  target_col: IND_MANDAT_DGAJ
+experiment: IND_MANDAT_DGAJ_hp_search_2
+metric:
+- balancedAcc
+model:
+- balanced_random_forest:
+    bootstrap: true
+    ccp_alpha: 0.0
+    class_weight: null
+    criterion: gini
+    max_depth: null
+    max_features: auto
+    max_leaf_nodes: null
+    max_samples: null
+    min_impurity_decrease: 0.0
+    min_samples_leaf: 1
+    min_samples_split: 2
+    min_weight_fraction_leaf: 0.0
+    n_estimators: 100
+    n_jobs: null
+    oob_score: false
+    random_state: 42
+    replacement: false
+    sampling_strategy: auto
+    verbose: 0
+    warm_start: false
+scalers:
+- standard
+task: classif

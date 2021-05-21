@@ -1,0 +1,278 @@
+config_dir: ./experiment
+cross_validation:
+- !!python/tuple
+  - !!python/tuple
+    - stratified_kfold
+    - !!python/object:sklearn.model_selection._split.StratifiedKFold
+      n_splits: 5
+      random_state: null
+      shuffle: false
+  - default
+drop_col: null
+enable_ensemble_methods: false
+experiment: COD_FERM_DOSS_PAL_pretraitement_donnees
+feature_selection:
+- !!python/tuple
+  - !!python/tuple
+    - null
+    - null
+  - null
+filepath: ./Data_juridique_complexite.xlsx
+metrics:
+- !!python/tuple
+  - !!python/tuple
+    - Accuracy
+    - !!python/object:sklearn.metrics._scorer._PredictScorer
+      _kwargs: {}
+      _score_func: !!python/name:sklearn.metrics._classification.accuracy_score ''
+      _sign: 1
+  - default
+- !!python/tuple
+  - !!python/tuple
+    - balancedAcc
+    - !!python/object:sklearn.metrics._scorer._PredictScorer
+      _kwargs: {}
+      _score_func: !!python/name:sklearn.metrics._classification.balanced_accuracy_score ''
+      _sign: 1
+  - default
+- !!python/tuple
+  - !!python/tuple
+    - F1
+    - !!python/object:sklearn.metrics._scorer._PredictScorer
+      _kwargs: {}
+      _score_func: !!python/object/apply:functools.partial
+        args:
+        - &id001 !!python/name:sklearn.metrics._classification.f1_score ''
+        state: !!python/tuple
+        - *id001
+        - !!python/tuple []
+        - average: binary
+        - __annotations__: {}
+          __doc__: "Compute the F1 score, also known as balanced F-score or F-measure.\n\
+            \n    The F1 score can be interpreted as a weighted average of the precision\
+            \ and\n    recall, where an F1 score reaches its best value at 1 and worst\
+            \ score at 0.\n    The relative contribution of precision and recall to\
+            \ the F1 score are\n    equal. The formula for the F1 score is::\n\n \
+            \       F1 = 2 * (precision * recall) / (precision + recall)\n\n    In\
+            \ the multi-class and multi-label case, this is the average of\n    the\
+            \ F1 score of each class with weighting depending on the ``average``\n\
+            \    parameter.\n\n    Read more in the :ref:`User Guide <precision_recall_f_measure_metrics>`.\n\
+            \n    Parameters\n    ----------\n    y_true : 1d array-like, or label\
+            \ indicator array / sparse matrix\n        Ground truth (correct) target\
+            \ values.\n\n    y_pred : 1d array-like, or label indicator array / sparse\
+            \ matrix\n        Estimated targets as returned by a classifier.\n\n \
+            \   labels : array-like, default=None\n        The set of labels to include\
+            \ when ``average != 'binary'``, and their\n        order if ``average\
+            \ is None``. Labels present in the data can be\n        excluded, for\
+            \ example to calculate a multiclass average ignoring a\n        majority\
+            \ negative class, while labels not present in the data will\n        result\
+            \ in 0 components in a macro average. For multilabel targets,\n      \
+            \  labels are column indices. By default, all labels in ``y_true`` and\n\
+            \        ``y_pred`` are used in sorted order.\n\n        .. versionchanged::\
+            \ 0.17\n           Parameter `labels` improved for multiclass problem.\n\
+            \n    pos_label : str or int, default=1\n        The class to report if\
+            \ ``average='binary'`` and the data is binary.\n        If the data are\
+            \ multiclass or multilabel, this will be ignored;\n        setting ``labels=[pos_label]``\
+            \ and ``average != 'binary'`` will report\n        scores for that label\
+            \ only.\n\n    average : {'micro', 'macro', 'samples','weighted', 'binary'}\
+            \ or None,             default='binary'\n        This parameter is required\
+            \ for multiclass/multilabel targets.\n        If ``None``, the scores\
+            \ for each class are returned. Otherwise, this\n        determines the\
+            \ type of averaging performed on the data:\n\n        ``'binary'``:\n\
+            \            Only report results for the class specified by ``pos_label``.\n\
+            \            This is applicable only if targets (``y_{true,pred}``) are\
+            \ binary.\n        ``'micro'``:\n            Calculate metrics globally\
+            \ by counting the total true positives,\n            false negatives and\
+            \ false positives.\n        ``'macro'``:\n            Calculate metrics\
+            \ for each label, and find their unweighted\n            mean.  This does\
+            \ not take label imbalance into account.\n        ``'weighted'``:\n  \
+            \          Calculate metrics for each label, and find their average weighted\n\
+            \            by support (the number of true instances for each label).\
+            \ This\n            alters 'macro' to account for label imbalance; it\
+            \ can result in an\n            F-score that is not between precision\
+            \ and recall.\n        ``'samples'``:\n            Calculate metrics for\
+            \ each instance, and find their average (only\n            meaningful\
+            \ for multilabel classification where this differs from\n            :func:`accuracy_score`).\n\
+            \n    sample_weight : array-like of shape (n_samples,), default=None\n\
+            \        Sample weights.\n\n    zero_division : \"warn\", 0 or 1, default=\"\
+            warn\"\n        Sets the value to return when there is a zero division,\
+            \ i.e. when all\n        predictions and labels are negative. If set to\
+            \ \"warn\", this acts as 0,\n        but warnings are also raised.\n\n\
+            \    Returns\n    -------\n    f1_score : float or array of float, shape\
+            \ = [n_unique_labels]\n        F1 score of the positive class in binary\
+            \ classification or weighted\n        average of the F1 scores of each\
+            \ class for the multiclass task.\n\n    See Also\n    --------\n    fbeta_score,\
+            \ precision_recall_fscore_support, jaccard_score,\n    multilabel_confusion_matrix\n\
+            \n    References\n    ----------\n    .. [1] `Wikipedia entry for the\
+            \ F1-score\n           <https://en.wikipedia.org/wiki/F1_score>`_.\n\n\
+            \    Examples\n    --------\n    >>> from sklearn.metrics import f1_score\n\
+            \    >>> y_true = [0, 1, 2, 0, 1, 2]\n    >>> y_pred = [0, 2, 1, 0, 0,\
+            \ 1]\n    >>> f1_score(y_true, y_pred, average='macro')\n    0.26...\n\
+            \    >>> f1_score(y_true, y_pred, average='micro')\n    0.33...\n    >>>\
+            \ f1_score(y_true, y_pred, average='weighted')\n    0.26...\n    >>> f1_score(y_true,\
+            \ y_pred, average=None)\n    array([0.8, 0. , 0. ])\n    >>> y_true =\
+            \ [0, 0, 0, 0, 0, 0]\n    >>> y_pred = [0, 0, 0, 0, 0, 0]\n    >>> f1_score(y_true,\
+            \ y_pred, zero_division=1)\n    1.0...\n\n    Notes\n    -----\n    When\
+            \ ``true positive + false positive == 0``, precision is undefined.\n \
+            \   When ``true positive + false negative == 0``, recall is undefined.\n\
+            \    In such cases, by default the metric will be set to 0, as will f-score,\n\
+            \    and ``UndefinedMetricWarning`` will be raised. This behavior can\
+            \ be\n    modified with ``zero_division``.\n    "
+          __module__: sklearn.metrics._classification
+          __name__: f1_score
+          __qualname__: f1_score
+          __wrapped__: *id001
+      _sign: 1
+  - default
+models:
+- !!python/tuple
+  - !!python/tuple
+    - balanced_random_forest
+    - !!python/object:imblearn.ensemble._forest.BalancedRandomForestClassifier
+      base_estimator: !!python/object:sklearn.tree._classes.DecisionTreeClassifier
+        _sklearn_version: 0.24.1
+        ccp_alpha: 0.0
+        class_weight: null
+        criterion: gini
+        max_depth: null
+        max_features: null
+        max_leaf_nodes: null
+        min_impurity_decrease: 0.0
+        min_impurity_split: null
+        min_samples_leaf: 1
+        min_samples_split: 2
+        min_weight_fraction_leaf: 0.0
+        random_state: null
+        splitter: best
+      bootstrap: true
+      ccp_alpha: 0.0
+      class_weight: null
+      criterion: gini
+      estimator_params: !!python/tuple
+      - criterion
+      - max_depth
+      - min_samples_split
+      - min_samples_leaf
+      - min_weight_fraction_leaf
+      - max_features
+      - max_leaf_nodes
+      - min_impurity_decrease
+      - min_impurity_split
+      - random_state
+      - ccp_alpha
+      max_depth: null
+      max_features: auto
+      max_leaf_nodes: null
+      max_samples: null
+      min_impurity_decrease: 0.0
+      min_impurity_split: null
+      min_samples_leaf: 1
+      min_samples_split: 2
+      min_weight_fraction_leaf: 0.0
+      n_estimators: 100
+      n_jobs: null
+      oob_score: false
+      random_state: null
+      replacement: false
+      sampling_strategy: auto
+      verbose: 0
+      warm_start: false
+  - default
+samplers:
+- !!python/tuple
+  - !!python/tuple
+    - null
+    - null
+  - null
+scale:
+- !!python/tuple
+  - !!python/tuple
+    - max_abs
+    - !!python/object:sklearn.preprocessing._data.MaxAbsScaler
+      _sklearn_version: 0.24.1
+      copy: true
+  - default
+- !!python/tuple
+  - !!python/tuple
+    - min_max
+    - !!python/object:sklearn.preprocessing._data.MinMaxScaler
+      _sklearn_version: 0.24.1
+      clip: false
+      copy: true
+      feature_range: !!python/tuple
+      - 0
+      - 1
+  - default
+- !!python/tuple
+  - !!python/tuple
+    - robust
+    - !!python/object:sklearn.preprocessing._data.RobustScaler
+      _sklearn_version: 0.24.1
+      copy: true
+      quantile_range: !!python/tuple
+      - 25.0
+      - 75.0
+      unit_variance: false
+      with_centering: true
+      with_scaling: true
+  - default
+- !!python/tuple
+  - !!python/tuple
+    - normalizer
+    - !!python/object:sklearn.preprocessing._data.Normalizer
+      _sklearn_version: 0.24.1
+      copy: true
+      norm: l2
+  - default
+- !!python/tuple
+  - !!python/tuple
+    - poly
+    - !!python/object:sklearn.preprocessing._data.PolynomialFeatures
+      _sklearn_version: 0.24.1
+      degree: 2
+      include_bias: true
+      interaction_only: false
+      order: C
+  - default
+- !!python/tuple
+  - !!python/tuple
+    - power
+    - !!python/object:sklearn.preprocessing._data.PowerTransformer
+      _sklearn_version: 0.24.1
+      copy: true
+      method: yeo-johnson
+      standardize: true
+  - default
+- !!python/tuple
+  - !!python/tuple
+    - quantile
+    - !!python/object:sklearn.preprocessing._data.QuantileTransformer
+      _sklearn_version: 0.24.1
+      copy: true
+      ignore_implicit_zeros: false
+      n_quantiles: 1000
+      output_distribution: uniform
+      random_state: null
+      subsample: 100000
+  - default
+- !!python/tuple
+  - !!python/tuple
+    - standard
+    - !!python/object:sklearn.preprocessing._data.StandardScaler
+      _sklearn_version: 0.24.1
+      copy: true
+      with_mean: true
+      with_std: true
+  - default
+- !!python/tuple
+  - !!python/tuple
+    - variance_threshold
+    - !!python/object:sklearn.feature_selection._variance_threshold.VarianceThreshold
+      _sklearn_version: 0.24.1
+      threshold: 0.0
+  - default
+seed: 42
+shuffle: true
+target_col: COD_FERM_DOSS_PAL
+task: classif
+use_class_weight: false
